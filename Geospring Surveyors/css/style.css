@@ -1,0 +1,210 @@
+/* ========== CUSTOM STYLES FOR KIYOOTO SURVEYORS ========== */
+
+/* Hero section background with overlay */
+.hero-bg {
+    /* Background image with dark overlay for better text readability */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                      url('../images/work14.jpeg');
+    background-size: cover;      /* Cover entire container */
+    background-position: center; /* Center the image */
+    min-height: 70vh; /* Better mobile height */
+    height: auto;
+}
+
+/* Section header background with blue overlay */
+.section-header-bg {
+    /* Blue overlay on background image for section headers */
+    background-image: linear-gradient(rgba(42, 125, 225, 0.9), rgba(42, 125, 225, 0.9)), 
+                      url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    padding: 3rem 1rem !important; /* Better mobile padding */
+}
+
+/* Pattern overlay for footer background */
+.pattern-overlay {
+    /* Subtle dot pattern for visual interest in footer */
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ========== SMOOTH SCROLLING ========== */
+/* Enable smooth scrolling for better user experience */
+html {
+    scroll-behavior: smooth; /* Animate scroll transitions */
+}
+
+/* ========== NAVIGATION STYLES ========== */
+/* Highlight active navigation link */
+.nav-link.active {
+    color: #2A7DE1;    /* Active link color */
+    font-weight: bold; /* Make active link bold */
+}
+
+/* ========== SECTION SPACING ========== */
+/* Add scroll margin to account for fixed header */
+section {
+    scroll-margin-top: 80px; /* Prevent content from hiding behind fixed nav */
+}
+
+/* ========== ANIMATIONS ========== */
+/* Fade in up animation for section content */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;           /* Start invisible */
+        transform: translateY(20px); /* Start 20px down */
+    }
+    to {
+        opacity: 1;           /* End fully visible */
+        transform: translateY(0);    /* End at normal position */
+    }
+}
+
+/* Utility class for fade in up animation */
+.animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards; /* Apply animation */
+}
+
+/* ========== MOBILE RESPONSIVENESS FIXES ========== */
+
+/* Base mobile fixes */
+.container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Fix text overflow */
+.text-3xl {
+    word-wrap: break-word;
+}
+
+/* Ensure images are responsive */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Mobile navigation fixes */
+@media (max-width: 768px) {
+    /* Fix container padding */
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    /* Better mobile navigation */
+    nav .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    /* Mobile menu improvements */
+    #mobile-menu a {
+        padding: 1rem 1.5rem;
+        font-size: 1.1rem;
+    }
+    
+    /* Hero section mobile fixes */
+    .hero-bg {
+        height: 60vh;
+        min-height: 400px;
+    }
+    
+    .hero-bg .container {
+        padding: 0 1rem;
+    }
+    
+    /* Fix hero content for mobile - REMOVED THE BROKEN SELECTOR */
+    .hero-content-container {
+        margin: 1rem;
+        padding: 1.5rem !important;
+        width: auto !important;
+        max-width: none;
+    }
+    
+    /* Services grid mobile fix */
+    .services-grid {
+        gap: 1rem;
+    }
+    
+    /* Info columns stack properly */
+    .info-columns > div {
+        padding: 2rem 1rem;
+    }
+    
+    /* Section spacing for mobile */
+    section {
+        scroll-margin-top: 60px;
+    }
+}
+
+/* Extra small mobile fixes */
+@media (max-width: 480px) {
+    /* Even smaller padding */
+    .container {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    
+    /* Mobile menu full width */
+    #mobile-menu {
+        width: 100%;
+    }
+    
+    /* Hero text sizing */
+    .hero-bg h2 {
+        font-size: 1.75rem !important;
+        line-height: 1.2;
+    }
+    
+    .hero-bg p {
+        font-size: 1rem !important;
+    }
+    
+    /* Services grid single column */
+    .services-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem;
+    }
+    
+    /* Button sizing */
+    .cta-button {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        font-size: 1rem;
+    }
+/* ========== IMAGE ENHANCEMENTS ========== */
+/* Improve image quality for team photos */
+img {
+    max-width: 100%;
+    height: auto;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* Enhance team photos for better clarity */
+.team-photo {
+    filter: brightness(1.08) contrast(1.08) saturate(1.1);
+    transition: filter 0.3s ease;
+}
+
+.team-photo:hover {
+    filter: brightness(1.12) contrast(1.12) saturate(1.15);
+}
+
+/* Specific styling for about page team photos */
+.about-team-photo {
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Project image enhancements */
+.project-image {
+    filter: brightness(1.05) contrast(1.05);
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.project-image:hover {
+    transform: scale(1.02);
+    filter: brightness(1.1) contrast(1.1);
+}
+}

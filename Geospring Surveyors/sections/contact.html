@@ -1,0 +1,217 @@
+<!-- ========== CONTACT PAGE HEADER ========== -->
+<div class="section-header-bg py-20">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold text-white mb-2">Contact Us</h1>
+        <p class="text-blue-100">Get in touch for a consultation</p>
+    </div>
+</div>
+
+<!-- ========== CONTACT CONTENT ========== -->
+<div class="container mx-auto px-4 py-16">
+     <!-- Two-column layout: form on left, details on right -->
+     <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+         <!-- ========== CONTACT FORM ========== -->
+         <div class="bg-white p-8 rounded shadow-lg border-t-4 border-energy-blue">
+             <h3 class="text-2xl font-bold text-gray-800 mb-6">Send us a Message</h3>
+             
+             <!-- SUCCESS/ERROR MESSAGES (Add these at the top of the form) -->
+             <div id="successMessage" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+                 <i class="fa-solid fa-check-circle mr-2"></i>
+                 Your message has been sent successfully! We'll get back to you soon.
+             </div>
+             <div id="errorMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                 <i class="fa-solid fa-exclamation-circle mr-2"></i>
+                 <span id="errorText">There was an error sending your message. Please try again.</span>
+             </div>
+             
+             <!-- FORM - ADD ACTION AND METHOD ATTRIBUTES HERE -->
+             <form id="contactForm" action="https://formspree.io/f/mpqweqpw" method="POST">
+                 <!-- Name fields - side by side on larger screens -->
+                 <div class="grid grid-cols-2 gap-4 mb-4">
+                     <input type="text" 
+                            name="firstName"
+                            placeholder="First Name" 
+                            class="w-full p-3 border rounded bg-gray-50 focus:outline-none focus:border-energy-blue"
+                            required>
+                     <input type="text" 
+                            name="lastName"
+                            placeholder="Last Name" 
+                            class="w-full p-3 border rounded bg-gray-50 focus:outline-none focus:border-energy-blue"
+                            required>
+                 </div>
+                 <!-- Email field -->
+                 <div class="mb-4">
+                     <input type="email" 
+                            name="email"
+                            placeholder="Email Address" 
+                            class="w-full p-3 border rounded bg-gray-50 focus:outline-none focus:border-energy-blue"
+                            required>
+                 </div>
+                 <!-- Subject field -->
+                 <div class="mb-4">
+                     <input type="text" 
+                            name="subject"
+                            placeholder="Subject" 
+                            class="w-full p-3 border rounded bg-gray-50 focus:outline-none focus:border-energy-blue"
+                            required>
+                 </div>
+                 <!-- Message textarea -->
+                 <div class="mb-6">
+                     <textarea rows="4" 
+                               name="message"
+                               placeholder="Your Message" 
+                               class="w-full p-3 border rounded bg-gray-50 focus:outline-none focus:border-energy-blue"
+                               required></textarea>
+                 </div>
+                 
+                 <!-- HIDDEN FIELDS FOR FORMSPREE CONFIGURATION -->
+                 <input type="hidden" name="_subject" value="New Contact Form Submission - GeoSpring Website">
+                 <input type="hidden" name="_replyto" value="davislimoh@gmail.com">
+                 <input type="hidden" name="_cc" value="davislimoh@gmail.com">
+                 
+                 <!-- Submit button - CHANGED TYPE FROM "button" TO "submit" -->
+                 <button type="submit" 
+                         id="submitBtn"
+                         class="w-full bg-energy-blue text-white font-bold py-3 rounded hover:bg-energy-dark-blue transition flex items-center justify-center">
+                     <span id="btnText">Send Message</span>
+                     <i id="loadingSpinner" class="fa-solid fa-spinner fa-spin ml-2 hidden"></i>
+                 </button>
+             </form>
+         </div>
+         
+         <!-- ========== CONTACT DETAILS & MAP ========== -->
+         <div>
+             <!-- Office information -->
+             <div class="mb-8">
+                 <h3 class="text-2xl font-bold text-gray-800 mb-4">Visit Our Office</h3>
+                 <p class="text-gray-600 mb-4">We are conveniently located in the Bungoma CBD. Feel free to drop by for a cup of coffee and a discussion about your land needs.</p>
+                 <!-- Contact details list -->
+                 <ul class="space-y-4 text-gray-700">
+                    <!-- Address -->
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-location-dot mt-1 mr-3 text-energy-blue"></i>
+                        <span>2nd Floor, Ambwere Plaza,<br> Jogoo Avenue, Bungoma</span>
+                    </li>
+                    <!-- Email -->
+                    <li class="flex items-center">
+                        <i class="fa-solid fa-envelope mr-3 text-energy-blue"></i>
+                        <span>geospringeosystems@gmail.com</span>
+                    </li>
+                    <!-- Phone -->
+                    <li class="flex items-center">
+                        <i class="fa-solid fa-phone mr-3 text-energy-blue"></i>
+                        <span>+254 743 763 570<br>+254 716 748 507</span>
+                    </li>
+                </ul>
+             </div>
+             <!-- Google Maps Embed -->
+             <div class="rounded-lg overflow-hidden shadow-lg">
+                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.822!2d34.5597!3d0.5701!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x17825df8d8d8d8d9%3A0x8d8d8d8d8d8d8d8d!2sMoi%20Ave%2C%20Bungoma!5e0!3m2!1sen!2ske!4v1670395200000" 
+                         width="100%" 
+                         height="400" 
+                         style="border:0;" 
+                         allowfullscreen="" 
+                         loading="lazy" 
+                         referrerpolicy="no-referrer-when-downgrade">
+                 </iframe>
+             </div>
+         </div>
+     </div>
+</div>
+
+<!-- ADD THIS JAVASCRIPT AT THE BOTTOM OF YOUR PAGE -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const successMessage = document.getElementById('successMessage');
+    const errorMessage = document.getElementById('errorMessage');
+    const errorText = document.getElementById('errorText');
+    
+    contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Hide messages
+        successMessage.classList.add('hidden');
+        errorMessage.classList.add('hidden');
+        
+        // Validate required fields
+        const requiredFields = contactForm.querySelectorAll('[required]');
+        let isValid = true;
+        
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                isValid = false;
+                field.classList.add('border-red-500');
+                field.classList.remove('focus:border-energy-blue');
+            } else {
+                field.classList.remove('border-red-500');
+                field.classList.add('focus:border-energy-blue');
+            }
+        });
+        
+        if (!isValid) {
+            errorText.textContent = 'Please fill in all required fields.';
+            errorMessage.classList.remove('hidden');
+            errorMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            return;
+        }
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        btnText.textContent = 'Sending...';
+        loadingSpinner.classList.remove('hidden');
+        submitBtn.classList.remove('hover:bg-energy-dark-blue');
+        
+        try {
+            // Send form data to Formspree
+            const formData = new FormData(contactForm);
+            const response = await fetch(contactForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                // Success
+                successMessage.classList.remove('hidden');
+                contactForm.reset();
+                
+                // Scroll to success message
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                // Error from Formspree
+                throw new Error('Form submission failed');
+            }
+        } catch (error) {
+            // Network or other error
+            errorText.textContent = 'There was an error sending your message. Please try again.';
+            errorMessage.classList.remove('hidden');
+            
+            // Scroll to error message
+            errorMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } finally {
+            // Reset button state
+            submitBtn.disabled = false;
+            btnText.textContent = 'Send Message';
+            loadingSpinner.classList.add('hidden');
+            submitBtn.classList.add('hover:bg-energy-dark-blue');
+        }
+    });
+    
+    // Remove red border when user starts typing
+    const formInputs = contactForm.querySelectorAll('input, textarea');
+    formInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            if (this.value.trim()) {
+                this.classList.remove('border-red-500');
+                this.classList.add('focus:border-energy-blue');
+            }
+        });
+    });
+});
+</script>
