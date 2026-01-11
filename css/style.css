@@ -113,8 +113,8 @@ img {
         padding: 0 1rem;
     }
     
-    /* Fix hero content for mobile - REMOVED THE BROKEN SELECTOR */
-    .hero-content-container {
+    /* Fix hero content for mobile */
+    .hero-bg > div {
         margin: 1rem;
         padding: 1.5rem !important;
         width: auto !important;
@@ -135,14 +135,49 @@ img {
     section {
         scroll-margin-top: 60px;
     }
+    
+    /* Fix mobile menu staying visible after click */
+    #mobile-menu {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        z-index: 40;
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+    
+    /* Mobile menu links */
+    .nav-link {
+        display: block;
+        padding: 12px 16px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    /* Fix statistics/milestones section on mobile */
+    .grid.grid-cols-4 {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem;
+    }
+    
+    .grid.grid-cols-4 > div {
+        padding: 0.75rem;
+    }
+    
+    .text-4xl {
+        font-size: 1.875rem !important;
+        line-height: 2.25rem !important;
+    }
 }
 
 /* Extra small mobile fixes */
 @media (max-width: 480px) {
     /* Even smaller padding */
     .container {
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
     }
     
     /* Mobile menu full width */
@@ -172,6 +207,33 @@ img {
         padding-right: 1.5rem;
         font-size: 1rem;
     }
+    
+    /* Statistics section extra small */
+    .grid.grid-cols-4 {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.5rem;
+    }
+    
+    .grid.grid-cols-4 > div {
+        padding: 0.5rem;
+    }
+    
+    .text-4xl {
+        font-size: 1.5rem !important;
+        line-height: 2rem !important;
+    }
+    
+    /* Project cards mobile fixes */
+    .project-card {
+        padding: 1rem !important;
+        margin-bottom: 1rem;
+    }
+    
+    .project-card h3 {
+        font-size: 1.25rem !important;
+    }
+}
+
 /* ========== IMAGE ENHANCEMENTS ========== */
 /* Improve image quality for team photos */
 img {
@@ -207,4 +269,40 @@ img {
     transform: scale(1.02);
     filter: brightness(1.1) contrast(1.1);
 }
+
+/* ========== FIX FOR PROJECTS PAGE MOBILE ========== */
+@media (max-width: 768px) {
+    /* Ensure projects grid is hidden by default on mobile */
+    #projectsGrid.hidden {
+        display: none;
+    }
+    
+    #projectsGrid.block {
+        display: block;
+    }
+    
+    /* Projects toggle button styling */
+    #projectsToggle {
+        display: flex !important;
+    }
+    
+    /* Mobile projects message */
+    #mobileProjectsMessage {
+        display: block;
+    }
+}
+
+/* Desktop - always show projects */
+@media (min-width: 768px) {
+    #projectsGrid {
+        display: block !important;
+    }
+    
+    #projectsToggle {
+        display: none !important;
+    }
+    
+    #mobileProjectsMessage {
+        display: none !important;
+    }
 }

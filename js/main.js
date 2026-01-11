@@ -50,6 +50,12 @@ async function loadSinglePageContent() {
             setupMobileMenu();
             setupSmoothScrolling();
             setupEquipmentSlideshow(); // ← ADDED: Equipment slideshow
+            
+            // Initialize projects page functionality
+            setupProjectsPage();
+            
+            // Initialize contact form if present
+            setupContactForm();
         } else {
             // Fallback: insert after navigation
             const nav = document.querySelector('nav');
@@ -105,90 +111,261 @@ function setupNavigationHighlighting() {
 
 // ========== MOBILE MENU FUNCTIONALITY ==========
 function setupMobileMenu() {
-    // Close mobile menu when a link is clicked
-     const mobileMenuButton = document.querySelector('button[onclick*="mobile-menu"]');
+    // Robust mobile menu: reliable selector, remove inline onclick, close on link click/outside click
+    const mobileMenuButton = document.querySelector('button[onclick*="mobile-menu"]') ||
+                             document.querySelector('button.md\\:hidden.text-energy-blue') ||
+                             document.querySelector('button[class*="md:hidden"]');
     const mobileMenu = document.getElementById('mobile-menu');
-    
+
     console.log('Mobile menu elements:', { mobileMenuButton, mobileMenu });
-    
-    if (mobileMenuButton && mobileMenu) {
-        // Remove the inline onclick and use event listener instead
-        mobileMenuButton.removeAttribute('onclick');
-        
-        mobileMenuButton.addEventListener('click', function(event) {
-            event.stopPropagation();
-            console.log('Mobile menu button clicked');
-            mobileMenu.classList.toggle('hidden');
-            
-            // Change icon based on menu state
-            const icon = mobileMenuButton.querySelector('i');
-            if (mobileMenu.classList.contains('hidden')) {
-                icon.className = 'fa-solid fa-bars';
-            } else {
-                icon.className = 'fa-solid fa-times';
-            }
-        });
-        
-        // Close mobile menu when a link is clicked
-        mobileMenu.addEventListener('click', function(event) {
-            if (event.target.tagName === 'A') {
-                console.log('Mobile menu link clicked, closing menu');
-                mobileMenu.classList.add('hidden');
-                
-                // Reset icon to bars
-                const icon = mobileMenuButton.querySelector('i');
-                icon.className = 'fa-solid fa-bars';
-            }
-        });
-        
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
-            if (mobileMenu && !mobileMenu.contains(event.target) && event.target !== mobileMenuButton) {
-                mobileMenu.classList.add('hidden');
-                
-                // Reset icon to bars
-                const icon = mobileMenuButton.querySelector('i');
-                if (icon) {
-                    icon.className = 'fa-solid fa-bars';
-                }
-            }
-        });
-        
-        console.log('Mobile menu functionality initialized');
-    } else {
-        console.error('Mobile menu elements not found:', {
-            button: mobileMenuButton,
-            menu: mobileMenu
-        });
+
+    if (!mobileMenuButton || !mobileMenu) {
+        console.error('Mobile menu elements not found:', { mobileMenuButton, mobileMenu });
+        return;
     }
+
+    // Remove any inline onclick handlers to avoid duplicate toggles
+    if (mobileMenuButton.getAttribute && mobileMenuButton.getAttribute('onclick')) {
+        mobileMenuButton.removeAttribute('onclick');
+    }
+
+    const setIconBars = () => {
+        const icon = mobileMenuButton.querySelector('i');
+        if (icon) icon.className = 'fa-solid fa-bars';
+    };
+
+    const setIconTimes = () => {
+        const icon = mobileMenuButton.querySelector('i');
+        if (icon) icon.className = 'fa-solid fa-times';
+    };
+
+    mobileMenuButton.addEventListener('click', function(event) {
+        event.stopPropagation();
+        mobileMenu.classList.toggle('hidden');
+        if (mobileMenu.classList.contains('hidden')) setIconBars(); else setIconTimes();
+    });
+
+    // Close mobile menu when any link inside it is clicked (delegation)
+    mobileMenu.addEventListener('click', function(event) {
+        const link = event.target.closest('a');
+        if (link) {
+            if (!mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                setIconBars();
+            }
+        }
+    });
+
+    // Close mobile menu when clicking outside of it
+    document.addEventListener('click', function(event) {
+        if (mobileMenu && !mobileMenu.contains(event.target) && event.target !== mobileMenuButton) {
+            if (!mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                setIconBars();
+            }
+        }
+    });
+
+    console.log('Mobile menu functionality initialized');
 }
 
 // ========== SMOOTH SCROLLING ==========
 function setupSmoothScrolling() {
     document.addEventListener('click', function(event) {
         // Check if clicked element is an anchor link
-        if (event.target.matches('a[href^="#"]') || event.target.closest('a[href^="#"]')) {
+        const target = event.target;
+        const link = target.closest('a[href^="#"]');
+        
+        if (link) {
             event.preventDefault();
             
-            const targetId = event.target.getAttribute('href') || 
-                            event.target.closest('a[href^="#"]').getAttribute('href');
+            const targetId = link.getAttribute('href');
             
             if (targetId && targetId !== '#') {
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
-                    const offsetTop = targetElement.offsetTop - 80; // Account for fixed header
+                    const headerOffset = 80; // Account for fixed header
+                    const elementPosition = targetElement.offsetTop;
+                    const offsetPosition = elementPosition - headerOffset;
                     
                     window.scrollTo({
-                        top: offsetTop,
+                        top: offsetPosition,
                         behavior: 'smooth'
                     });
+                    
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        
+                        // Reset menu icon
+                        const menuButton = document.querySelector('button.md\\:hidden.text-energy-blue');
+                        if (menuButton) {
+                            const icon = menuButton.querySelector('i');
+                            if (icon) {
+                                icon.className = 'fa-solid fa-bars';
+                            }
+                        }
+                    }
                 }
             }
         }
     });
 }
 
-// ========== CLIENT PORTAL MODAL FUNCTIONS ========== // ← ADDED
+// ========== PROJECTS PAGE FUNCTIONALITY ==========
+function setupProjectsPage() {
+    // Projects toggle for mobile
+    const projectsToggle = document.getElementById('projectsToggle');
+    const projectsGrid = document.getElementById('projectsGrid');
+    const toggleText = document.getElementById('toggleText');
+    const toggleIcon = document.getElementById('toggleIcon');
+    const mobileProjectsMessage = document.getElementById('mobileProjectsMessage');
+    
+    if (projectsToggle && projectsGrid) {
+        projectsToggle.addEventListener('click', function() {
+            const isHidden = projectsGrid.classList.contains('hidden');
+            
+            if (isHidden) {
+                // Show projects
+                projectsGrid.classList.remove('hidden');
+                projectsGrid.classList.add('block');
+                if (mobileProjectsMessage) {
+                    mobileProjectsMessage.classList.add('hidden');
+                }
+                if (toggleText) {
+                    toggleText.textContent = 'Hide Projects';
+                }
+                if (toggleIcon) {
+                    toggleIcon.className = 'fa-solid fa-chevron-up ml-2';
+                }
+            } else {
+                // Hide projects
+                projectsGrid.classList.add('hidden');
+                projectsGrid.classList.remove('block');
+                if (mobileProjectsMessage) {
+                    mobileProjectsMessage.classList.remove('hidden');
+                }
+                if (toggleText) {
+                    toggleText.textContent = 'Show Projects';
+                }
+                if (toggleIcon) {
+                    toggleIcon.className = 'fa-solid fa-chevron-down ml-2';
+                }
+            }
+        });
+    }
+    
+    // Add smooth scrolling for contact links in projects page
+    document.querySelectorAll('a[href="#contact"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const contactSection = document.querySelector('#contact');
+            if (contactSection) {
+                const headerOffset = 80;
+                const elementPosition = contactSection.offsetTop;
+                const offsetPosition = elementPosition - headerOffset;
+                
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+}
+
+// ========== CONTACT FORM FUNCTIONALITY ==========
+function setupContactForm() {
+    const contactForm = document.getElementById('contactForm');
+    
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const submitBtn = form.querySelector('.submit-btn');
+            const btnText = form.querySelector('#btnText');
+            const loadingSpinner = form.querySelector('#loadingSpinner');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            
+            // Hide messages
+            if (successMessage) successMessage.classList.add('hidden');
+            if (errorMessage) errorMessage.classList.add('hidden');
+            
+            // Validate required fields
+            const requiredFields = form.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.classList.add('border-red-500');
+                    field.classList.remove('focus:border-energy-blue');
+                } else {
+                    field.classList.remove('border-red-500');
+                    field.classList.add('focus:border-energy-blue');
+                }
+            });
+            
+            if (!isValid) {
+                if (errorText) errorText.textContent = 'Please fill in all required fields.';
+                if (errorMessage) errorMessage.classList.remove('hidden');
+                return;
+            }
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            if (btnText) btnText.textContent = 'Sending...';
+            if (loadingSpinner) loadingSpinner.classList.remove('hidden');
+            
+            try {
+                // Send form data to Formspree
+                const formData = new FormData(form);
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    // Success
+                    if (successMessage) successMessage.classList.remove('hidden');
+                    form.reset();
+                } else {
+                    // Error from Formspree
+                    throw new Error('Form submission failed');
+                }
+            } catch (error) {
+                // Network or other error
+                if (errorText) errorText.textContent = 'There was an error sending your message. Please try again.';
+                if (errorMessage) errorMessage.classList.remove('hidden');
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                if (btnText) btnText.textContent = 'Send Message';
+                if (loadingSpinner) loadingSpinner.classList.add('hidden');
+            }
+        });
+        
+        // Remove red border when user starts typing
+        const formInputs = contactForm.querySelectorAll('input, textarea');
+        formInputs.forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.value.trim()) {
+                    this.classList.remove('border-red-500');
+                    this.classList.add('focus:border-energy-blue');
+                }
+            });
+        });
+    }
+}
+
+// ========== CLIENT PORTAL MODAL FUNCTIONS ==========
 function showComingSoon() {
     console.log('Client Portal button clicked!');
     const modal = document.getElementById('comingSoonModal');
@@ -326,7 +503,7 @@ function setupEquipmentSlideshow() {
     console.log('✅ Equipment slideshow initialized with', slides.length, 'slides');
 }
 
-// ========== READ MORE TOGGLE FUNCTION ==========
+// ========== READ MORE TOGGLE FUNCTIONS ==========
 function toggleReadMore(button) {
     const content = button.previousElementSibling;
     const icon = button.querySelector('i');
@@ -341,6 +518,7 @@ function toggleReadMore(button) {
         button.innerHTML = 'Read More <i class="fa-solid fa-arrow-down ml-1"></i>';
     }
 }
+
 function toggleEquipmentInfo(button) {
     const content = button.nextElementSibling;
 
@@ -357,17 +535,10 @@ function toggleEquipmentInfo(button) {
     }
 }
 
-// Re-initialize navigation when new content is loaded (for dynamic updates)
-function reinitializeNavigation() {
-    setupNavigationHighlighting();
-    setupSmoothScrolling();
-}
-
-
 // ========== INITIALIZATION ==========
 // Initialize everything when the page is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Initializing Kiyooto Surveyors website...');
+    console.log('Initializing GeoSpring GeoSystems website...');
     
     // Load all content as single page
     loadSinglePageContent().then(() => {
